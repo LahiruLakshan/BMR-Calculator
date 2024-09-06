@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../constants.dart';
 import 'meal_plan_page.dart';
 
 class CaloriePage extends StatefulWidget {
@@ -30,7 +31,7 @@ class CaloriePage extends StatefulWidget {
 
 class _CaloriePageState extends State<CaloriePage> {
   Future<void> _getMealPlan() async {
-    final url = Uri.parse('https://ec99-35-188-236-129.ngrok-free.app/meal-plan');
+    final url = Uri.parse('${BASE_URL}meal-plan'); // Use the base URL from constants
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},

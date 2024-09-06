@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../constants.dart';
 import 'calorie_page.dart';
 
 class HealthPage extends StatefulWidget {
@@ -53,7 +54,7 @@ class _HealthPageState extends State<HealthPage> {
 
     // Send HTTP POST request
     final response = await http.post(
-      Uri.parse('https://ec99-35-188-236-129.ngrok-free.app/calculate-calories'),
+      Uri.parse('${BASE_URL}calculate-calories'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(requestData),
     );
