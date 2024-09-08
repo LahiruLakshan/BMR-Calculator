@@ -39,7 +39,9 @@ class _CaloriePageState extends State<CaloriePage> {
     );
 
     if (response.statusCode == 200) {
-      final data = json.decode(response.body);
+      final data = jsonDecode(response.body);
+      print(response);
+      print(data);
 
       Navigator.push(
         context,

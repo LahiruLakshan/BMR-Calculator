@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import '../constants.dart';
-import 'calorie_page.dart';
+import 'food_wish_page.dart'; // Import the FoodWishPage
 
 class HealthPage extends StatefulWidget {
   final String gender;
@@ -32,7 +32,7 @@ class _HealthPageState extends State<HealthPage> {
   String selectedDiet = ''; // Track selected diet type
 
   Future<void> _sendDataAndNavigate() async {
-    if (selectedGoal.isEmpty || selectedDiet.isEmpty) {
+    if (selectedGoal.isEmpty) {
       // Show an alert if any field is not selected
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please select all fields.')),
@@ -63,18 +63,20 @@ class _HealthPageState extends State<HealthPage> {
       final responseData = jsonDecode(response.body);
       final dailyCalorieLimit = responseData['daily_calorie_limit'];
 
-      // Combine with previous data and navigate
+      // Navigate to the FoodWishPage with previous and new data
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => CaloriePage(
-            age: widget.age,
-            weight: widget.weight,
-            height: widget.height,
+          builder: (context) => FoodWishPage(
             gender: widget.gender,
+            age: widget.age,
+            height: widget.height,
+            weight: widget.weight,
             activityLevel: widget.activityLevel,
+            activityDescription: widget.activityDescription,
             goal: selectedGoal,
-            dailyCalorieLimit: dailyCalorieLimit.toString(),
+            diet: selectedDiet,
+            calorie: dailyCalorieLimit.toString(),
           ),
         ),
       );
@@ -137,63 +139,73 @@ class _HealthPageState extends State<HealthPage> {
             const SizedBox(height: 20),
 
             // 4. Second Question Text
-            const Text(
-              "I am a _______ ,",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Poppins',
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 20),
+            // const Text(
+            //   "I am a _______ ,",
+            //   style: TextStyle(
+            //     fontSize: 20,
+            //     fontWeight: FontWeight.bold,
+            //     fontFamily: 'Poppins',
+            //   ),
+            //   textAlign: TextAlign.center,
+            // ),
+            // const SizedBox(height: 20),
 
             // 5. Diet Type Buttons
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: selectedDiet == 'Vegetarian' ? Colors.green : Colors.white,
-                      onPrimary: selectedDiet == 'Vegetarian' ? Colors.white : Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.horizontal(left: Radius.circular(10)),
-                        side: const BorderSide(color: Colors.black),
-                      ),
-                      elevation: 0,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        selectedDiet = 'Vegetarian';
-                      });
-                    },
-                    child: const Text('Vegetarian'),
-                  ),
-                ),
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: selectedDiet == 'Non-vegetarian' ? Colors.orange : Colors.white,
-                      onPrimary: selectedDiet == 'Non-vegetarian' ? Colors.white : Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.horizontal(right: Radius.circular(10)),
-                        side: const BorderSide(color: Colors.black),
-                      ),
-                      elevation: 0,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        selectedDiet = 'Non-vegetarian';
-                      });
-                    },
-                    child: const Text('Non-vegetarian'),
-                  ),
-                ),
-              ],
-            ),
-            const Spacer(),
+            // Row(
+            //   children: [
+            //     Expanded(
+            //       child: ElevatedButton(
+            //         style: ElevatedButton.styleFrom(
+            //           primary: selectedDiet == 'Vegetarian'
+            //               ? Colors.green
+            //               : Colors.white,
+            //           onPrimary: selectedDiet == 'Vegetarian'
+            //               ? Colors.white
+            //               : Colors.black,
+            //           shape: RoundedRectangleBorder(
+            //             borderRadius:
+            //                 BorderRadius.horizontal(left: Radius.circular(10)),
+            //             side: const BorderSide(color: Colors.black),
+            //           ),
+            //           elevation: 0,
+            //         ),
+            //         onPressed: () {
+            //           setState(() {
+            //             selectedDiet = 'Vegetarian';
+            //           });
+            //         },
+            //         child: const Text('Vegetarian'),
+            //       ),
+            //     ),
+            //     Expanded(
+            //       child: ElevatedButton(
+            //         style: ElevatedButton.styleFrom(
+            //           primary: selectedDiet == 'Non-vegetarian'
+            //               ? Colors.orange
+            //               : Colors.white,
+            //           onPrimary: selectedDiet == 'Non-vegetarian'
+            //               ? Colors.white
+            //               : Colors.black,
+            //           shape: RoundedRectangleBorder(
+            //             borderRadius:
+            //                 BorderRadius.horizontal(right: Radius.circular(10)),
+            //             side: const BorderSide(color: Colors.black),
+            //           ),
+            //           elevation: 0,
+            //         ),
+            //         onPressed: () {
+            //           setState(() {
+            //             selectedDiet = 'Non-vegetarian';
+            //           });
+            //         },
+            //         child: const Text('Non-vegetarian'),
+            //       ),
+            //     ),
+            //   ],
+            // ),
+            // const Spacer(),
 
-            // Proceed Button
+            // Next Button
             ElevatedButton(
               onPressed: _sendDataAndNavigate,
               style: ElevatedButton.styleFrom(
@@ -204,7 +216,7 @@ class _HealthPageState extends State<HealthPage> {
                 ),
                 elevation: 0,
               ),
-              child: const Text('Proceed', style: TextStyle(color: Colors.black)),
+              child: const Text('Next', style: TextStyle(color: Colors.black)),
             ),
           ],
         ),
@@ -245,4 +257,3 @@ class _HealthPageState extends State<HealthPage> {
     );
   }
 }
-
